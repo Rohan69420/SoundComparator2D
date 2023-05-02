@@ -8,6 +8,7 @@ public class InstantiateSquare : MonoBehaviour
     public GameObject _sampleSquarePrefab;
     GameObject[] _sampleSquare = new GameObject[512];
     public float _maxScale;
+    public float _offset;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,7 @@ public class InstantiateSquare : MonoBehaviour
             _instanceSquare.transform.parent = this.transform;
             _instanceSquare.name = "Sample" + i;
             //_instanceSquare.transform.position = transform.right * 100 * (i+1);
-            _instanceSquare.transform.position = new Vector3(.4f * i, 0, 0);
+            _instanceSquare.transform.position = new Vector3((_sampleSquarePrefab.transform.localScale.x + _offset) * i, 0, 0); //maintaining gap w/ resize
             //this.transform.position = transform.right  * (i+1);
             _sampleSquare[i] = _instanceSquare;
 
@@ -32,8 +33,8 @@ public class InstantiateSquare : MonoBehaviour
     {
         for (int i=0; i<512;i++)
         {
-            //hardcoded scales
-            _sampleSquare[i].transform.localScale = new Vector3(0.36f,Audio._samples[i] * _maxScale,0.36f);
+            //hardcoded scales transformed into editor changable scaled depending on the prefab
+            _sampleSquare[i].transform.localScale = new Vector3(_sampleSquarePrefab.transform.localScale.x ,Audio._samples[i] * _maxScale, _sampleSquarePrefab.transform.localScale.z);
         }
         
     }

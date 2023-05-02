@@ -9,7 +9,7 @@ public class Audio : MonoBehaviour
     AudioSource _audioSource;
     public static float[] _samples= new float[512]; //number of frequency samples obtained by FFT; 256, 512, 1024
     public static float[] _requiredBands = new float[32]; //10 bands for now but we can alter it for future accuracies
-    
+    public static bool paused=false;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +19,11 @@ public class Audio : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetSpectrumAudioSource();
+        if (!paused)
+        {
+            //freezing the FFT values if audio is paused; almost like screenshot action
+            GetSpectrumAudioSource();
+        }
         MakeFrequencyBands();
     }
     void GetSpectrumAudioSource()
@@ -66,5 +70,15 @@ public class Audio : MonoBehaviour
           
         }
 
+    }
+    public void SetPause()
+    {
+        //no safety checks if the audio is present or if it is already playing
+        paused = true;
+    }
+
+    public void SetPlay()
+    {
+        paused = false;
     }
 }

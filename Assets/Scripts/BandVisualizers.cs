@@ -15,6 +15,6 @@ public class BandVisualizers : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.localScale = new Vector3(transform.localScale.x, Audio._requiredBands[_band] * _maxScale * _scaleMultiplier, transform.localScale.z);
+        transform.localScale = new Vector3(transform.localScale.x, Audio._requiredBands[_band] * _maxScale * _scaleMultiplier , transform.localScale.z);
     }
 }
