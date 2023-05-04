@@ -7,11 +7,14 @@ public class InstantiateSquare : MonoBehaviour
 {
     public GameObject _sampleSquarePrefab;
     GameObject[] _sampleSquare = new GameObject[512];
-    public float _maxScale;
+    public float _normalizeTo;
     public float _offset;
 
     /*normalization scale to normalize the visualization rects 
      * so that it stays relatives and never goes out of frame */
+
+    //maximum value among the samples
+    public float _maxSampleValue;
 
     //Y offset to spawn the sample visualizers
     public float Y_offset;
@@ -37,10 +40,22 @@ public class InstantiateSquare : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        _maxSampleValue = Mathf.Max(Audio._samples);
+        
+        /* the local scale is showing (0.3,NaN, 0.3) 
+         * NaN is often the result of division by zero. so need to initialize it to 1 if zero*/
+
+        //divide by zero prevention
+        if(_maxSampleValue < 0.0001)
+        {
+            _maxSampleValue = 1;
+        }
+
         for (int i=0; i<512;i++)
         {
             //hardcoded scales transformed into editor changable scaled depending on the prefab
-            _sampleSquare[i].transform.localScale = new Vector3(_sampleSquarePrefab.transform.localScale.x ,Audio._samples[i] * _maxScale, _sampleSquarePrefab.transform.localScale.z);
+            //normalized inside the Vector3
+            _sampleSquare[i].transform.localScale = new Vector3(_sampleSquarePrefab.transform.localScale.x ,Audio._samples[i] * _normalizeTo / _maxSampleValue, _sampleSquarePrefab.transform.localScale.z);
         }
         
     }

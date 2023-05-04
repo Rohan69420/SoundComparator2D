@@ -3346,7 +3346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sampleSquarePrefab: {fileID: 907627002}
-  _maxScale: 1000
+  _normalizeTo: 1000
   _offset: 0.5
   Y_offset: -30
 --- !u!1 &568214209
@@ -8293,7 +8293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sampleSquarePrefab: {fileID: 907627002}
-  _maxScale: 1000
+  _normalizeTo: 1000
   _offset: 0.5
   Y_offset: 10
 --- !u!1 &1416844884
