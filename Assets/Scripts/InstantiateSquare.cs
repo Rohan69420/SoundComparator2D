@@ -10,6 +10,12 @@ public class InstantiateSquare : MonoBehaviour
     public float _maxScale;
     public float _offset;
 
+    /*normalization scale to normalize the visualization rects 
+     * so that it stays relatives and never goes out of frame */
+
+    //Y offset to spawn the sample visualizers
+    public float Y_offset;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +27,7 @@ public class InstantiateSquare : MonoBehaviour
             _instanceSquare.transform.parent = this.transform;
             _instanceSquare.name = "Sample" + i;
             //_instanceSquare.transform.position = transform.right * 100 * (i+1);
-            _instanceSquare.transform.position = new Vector3((_sampleSquarePrefab.transform.localScale.x + _offset) * i, 0, 0); //maintaining gap w/ resize
+            _instanceSquare.transform.position = new Vector3((_sampleSquarePrefab.transform.localScale.x + _offset) * i, Y_offset, 0); //maintaining gap w/ resize
             //this.transform.position = transform.right  * (i+1);
             _sampleSquare[i] = _instanceSquare;
 

@@ -53,6 +53,7 @@ public class CompareAll : MonoBehaviour
     }
     void Compare()
     {
+        //N-1 to fix array out of bound error, still unresolved.
         for (int i = 0; i < N-1; i++)
         {
             //might be error in this segment
