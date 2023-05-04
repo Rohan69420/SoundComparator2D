@@ -79,6 +79,14 @@ public class Audio : MonoBehaviour
 
     public void SetPlay()
     {
-        paused = false;
+        if (_audioSource.isPlaying)
+        {
+            paused = false;
+        }
+        else
+        {
+            _audioSource.Play();
+            paused = false;
+        }
     }
 }
