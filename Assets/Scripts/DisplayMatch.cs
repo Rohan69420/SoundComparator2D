@@ -21,6 +21,6 @@ public class DisplayMatch : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TextField.text = "Match" + CompareAll._matchedPercentage.ToString() + "%";
+        TextField.text = "Match: " + CompareAll._matchedPercentage.ToString() + "%";
     }
 }

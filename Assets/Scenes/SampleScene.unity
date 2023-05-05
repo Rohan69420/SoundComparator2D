@@ -7210,7 +7210,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -87.442604, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -11109,7 +11109,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 320d381f461ddd64f8d07ccbb40beb22, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -11207,6 +11207,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f08533bef24f44c97cce4ecc486bcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _audioClip: {fileID: 8300000, guid: 320d381f461ddd64f8d07ccbb40beb22, type: 3}
+  _useMicrophone: 1
 --- !u!1 &1990993308
 GameObject:
   m_ObjectHideFlags: 0

@@ -39,6 +39,8 @@ public class SecondAudio : MonoBehaviour
                 it retake another 10 seconds of buffer and makes into the clip and plays it and so on
                 */
 
+                //set looping mode of audio enabled for microphone for continuous feed
+                _secondAudioSource.loop = true;
 
                 _secondAudioSource.clip = Microphone.Start(null, true, 10, AudioSettings.outputSampleRate);
                 
@@ -56,8 +58,11 @@ public class SecondAudio : MonoBehaviour
                 _useMicrophone = false;
             }
         }
-        else
+        else if(_audioClip!= null) 
         {
+            //set loop disabled so that play pause can work as intended
+            _secondAudioSource.loop = false;
+
             UnityEngine.Debug.Log("Clip should be assigned!");
             _secondAudioSource.clip = _audioClip;
         }
