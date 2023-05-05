@@ -6,6 +6,11 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class SecondAudio : MonoBehaviour
 {
+    //Adding microphone functionality
+    public AudioClip _audioClip;
+    public bool _useMicrophone;
+
+
     AudioSource _secondAudioSource;
     public static float[] _secondSamples = new float[512]; //number of frequency samples obtained by FFT; 256, 512, 1024
     public static float[] _secondRequiredBands = new float[32]; //10 bands for now but we can alter it for future accuracies
@@ -14,6 +19,48 @@ public class SecondAudio : MonoBehaviour
     void Start()
     {
         _secondAudioSource = GetComponent<AudioSource>();
+
+        //microphone input
+
+        if (_useMicrophone)
+        {
+            if (Microphone.devices.Length > 0)
+            {
+                //can use the selected device by converting it into string
+                //set to 10 seconds
+                /*here the microphone is constantly looping and the input audio being clipped
+                 * but I want it to start on button click of play therefore I'll shift this 
+                 * line of code to the button click
+                 */
+
+                
+                /* These functions mean that as soon as microphone is started, it starts to buffer
+                 but it doesnt start playing back until we use the Play() function of the clip
+                it retake another 10 seconds of buffer and makes into the clip and plays it and so on
+                */
+
+
+                _secondAudioSource.clip = Microphone.Start(null, true, 10, AudioSettings.outputSampleRate);
+                
+                
+                //record for the first 10 seconds and then we need to keep on recording until we need to stop?
+                //now play the 10 second chunk
+               
+                _secondAudioSource.Play();
+                
+                //also need to set the loop to enable incase of microphone to allow continuous stream
+                //and disable it on pause?
+            }
+            else
+            {
+                _useMicrophone = false;
+            }
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Clip should be assigned!");
+            _secondAudioSource.clip = _audioClip;
+        }
     }
 
     // Update is called once per frame
@@ -75,19 +122,59 @@ public class SecondAudio : MonoBehaviour
     public void SetPause()
     {
         //no safety checks if the audio is present or if it is already playing
+        //pause is done using Unity Pause()
         paused = true;
+
+        //end microphone if mic is being used to avoid annoying loop
+       /* if (_useMicrophone && Microphone.IsRecording(null))
+        {
+            //null since we have selected default mic only
+            Microphone.End(null);
+            //the pausing is done by the editor based function
+        } */    
     }
 
     public void SetPlay()
     {
+        /*
+        if (_secondAudioSource.isPlaying && !_useMicrophone)
+        {
+            //no need to replay and use Unity Unpause(); just set the flag if it is paused
+            paused = false;
+        }
+        else
+        {
+            if (_useMicrophone)
+            {
+                //query if the microphone is already recording
+                if (!Microphone.IsRecording(null))
+                {
+                    //here is the handling for the microphone
+                    _secondAudioSource.clip = Microphone.Start(null, true, 10, AudioSettings.outputSampleRate);
+
+                }
+                /* we not only have to start the microphone but play it after starting so that the feedback
+                starts and we can graph the live audio */
+         /*       _secondAudioSource.Play();
+            }
+            else
+            {
+                //if it hasn't played yet then play it
+                _secondAudioSource.Play();
+                paused = false;
+            }
+        }
+        */
         if (_secondAudioSource.isPlaying)
         {
             paused = false;
         }
         else
         {
+            //if it hasn't played yet then play it
             _secondAudioSource.Play();
             paused = false;
         }
+
     }
 }
