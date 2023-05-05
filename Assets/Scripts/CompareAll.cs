@@ -7,15 +7,23 @@ public class CompareAll : MonoBehaviour
 {
     //index and the intensity value
     PriorityQueue<int, float> pq1 = new PriorityQueue<int, float>();
+    PriorityQueue<int, float> pq2 = new PriorityQueue<int, float>();
 
     //public float to view values
-    public float MaximumSignal;
+    public float MaximumSignalOne, MaximumSignalTwo;
+
+    //comparison parameter: the indices upto which we intend to compare
+    public int CompareParameter;
+
+    //float 
+    float maxVal;
 
     //Top N values
     static int N = 64;
 
     //64 values should suffice, we can always go higher if we need more accuracy
-    public int[] PickedIndex = new int[N];
+    public int[] FirstSortedIndex = new int[N];
+    public int[] SecondSortedIndex = new int[N];
 
     //temporary float to reverse
     float reversedVal;
@@ -37,35 +45,81 @@ public class CompareAll : MonoBehaviour
 
         //IF THE SIGNAL IS DEMANDING VERY PRECISE FREQUENCES THEN REDUCE THE SAMPLE SIZE.
 
-        //does this maximum technique work?
-        float maxVal = Mathf.Max(Audio._samples);
-        MaximumSignal= maxVal; //unneccesary variable tho
-
-        for (int i = 0; i < N; i++)
+        if (!Audio.paused)
         {
-            //achieve priority reversal and enqueue in the same loop
-            reversedVal = maxVal - Audio._samples[i];
+            //does this maximum technique work?
+            maxVal = Mathf.Max(Audio._samples);
+            MaximumSignalOne = maxVal; //unneccesary variable tho
 
-            //no need to worry about negative values because the lowest it can go is 0
-            pq1.Enqueue(i, reversedVal);
+            //first loop
+            for (int i = 0; i < N; i++)
+            {
+                //achieve priority reversal and enqueue in the same loop
+                reversedVal = maxVal - Audio._samples[i];
+
+                //no need to worry about negative values because the lowest it can go is 0
+                pq1.Enqueue(i, reversedVal);
+            }
+
         }
-        Compare();
+        if (!SecondAudio.paused)
+        {
+            maxVal = Mathf.Max(SecondAudio._secondSamples);
+            MaximumSignalTwo = maxVal;
+            //second loop
+            for (int i = 0; i < N; i++)
+            {
+                //achieve priority reversal and enqueue in the same loop
+                reversedVal = maxVal - SecondAudio._secondSamples[i];
+
+                //no need to worry about negative values because the lowest it can go is 0
+                pq2.Enqueue(i, reversedVal);
+            }
+        }
+        if (!Audio.paused && !SecondAudio.paused)
+        {
+            ShowOrder();
+        }
+        
+        CalculateSimilarity();
     }
-    void Compare()
+    void ShowOrder()
     {
         //N-1 to fix array out of bound error, still unresolved.
         for (int i = 0; i < N-1; i++)
         {
             //might be error in this segment
-            pq1.TryDequeue(out int a, out float x);
-            //PickedIndex[i] = a;
-            if (PickedIndex != null)
+            
+            
+            //FirstSortedIndex[i] = a;
+            if (FirstSortedIndex != null || !Audio.paused)
             {
-                PickedIndex[i] = a;
+                pq1.TryDequeue(out int a, out float x);
+                FirstSortedIndex[i] = a;
 
+            }
+            if (SecondSortedIndex != null || !SecondAudio.paused)
+            {
+                pq2.TryDequeue(out int u, out float v);
+                SecondSortedIndex[i] = u;
             }
             //Debug
             //UnityEngine.Debug.Log(i.ToString() + " " + a.ToString());
         }
+    }
+    void CalculateSimilarity()
+    {
+        int count = 0;
+        for (int i=0; i<CompareParameter - 1; i++)
+        {
+            for (int j=i+1; j<CompareParameter; j++)
+            {
+                if (FirstSortedIndex[i] == SecondSortedIndex[j])
+                {
+                    count++;
+                }
+            }
+        }
+
     }
 }
