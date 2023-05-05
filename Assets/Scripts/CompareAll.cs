@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using Utils;
 
@@ -11,9 +12,11 @@ public class CompareAll : MonoBehaviour
 
     //public float to view values
     public float MaximumSignalOne, MaximumSignalTwo;
+    public static float _matchedPercentage;
 
     //comparison parameter: the indices upto which we intend to compare
     public int CompareParameter;
+    public int count;
 
     //float 
     float maxVal;
@@ -76,7 +79,7 @@ public class CompareAll : MonoBehaviour
                 pq2.Enqueue(i, reversedVal);
             }
         }
-        if (!Audio.paused && !SecondAudio.paused)
+        if (!Audio.paused || !SecondAudio.paused) //F.X = F 
         {
             ShowOrder();
         }
@@ -92,13 +95,13 @@ public class CompareAll : MonoBehaviour
             
             
             //FirstSortedIndex[i] = a;
-            if (FirstSortedIndex != null || !Audio.paused)
+            if (FirstSortedIndex != null && !Audio.paused)
             {
                 pq1.TryDequeue(out int a, out float x);
                 FirstSortedIndex[i] = a;
 
             }
-            if (SecondSortedIndex != null || !SecondAudio.paused)
+            if (SecondSortedIndex != null && !SecondAudio.paused)
             {
                 pq2.TryDequeue(out int u, out float v);
                 SecondSortedIndex[i] = u;
@@ -109,17 +112,25 @@ public class CompareAll : MonoBehaviour
     }
     void CalculateSimilarity()
     {
-        int count = 0;
-        for (int i=0; i<CompareParameter - 1; i++)
+        //int count = 0;
+        count = 0;
+        for (int i=0; i<CompareParameter; i++)
         {
-            for (int j=i+1; j<CompareParameter; j++)
+            for (int j=0; j<CompareParameter; j++)
             {
                 if (FirstSortedIndex[i] == SecondSortedIndex[j])
                 {
-                    count++;
+                    count=count + 1 ;
                 }
             }
         }
-
+        if (CompareParameter == 0)
+        {
+            UnityEngine.Debug.Log("Attemped Divide by Zero!!!");
+        }
+        else
+        {
+            _matchedPercentage = count * 100 / CompareParameter;
+        }
     }
 }
